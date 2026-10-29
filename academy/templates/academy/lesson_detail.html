@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course.title }} | Federal Polytechnic Idah</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --brand-green: #008751;
+            --brand-dark-green: #005c37;
+            --bg-gray: #e9ecef;
+            --card-border: #d1d5db;
+        }
+
+        body {
+            background-color: var(--bg-gray);
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Announcement Banner */
+        .info-banner {
+            background-color: #d1ecf1;
+            border-bottom: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 10px 20px;
+            font-size: 13px;
+        }
+
+        /* Top Green Header Bar */
+        .brand-header {
+            background-color: var(--brand-green);
+            padding: 15px 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: bold;
+            font-size: 18px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .brand-logo:hover {
+            color: white;
+        }
+
+        /* Course Info Card */
+        .course-info-card {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .badge-active-course {
+            background-color: var(--brand-green);
+            color: white;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .course-detail-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #111827;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .instructor-text {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .course-detail-desc {
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .btn-back-courses {
+            background-color: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .btn-back-courses:hover {
+            background-color: #e5e7eb;
+            color: #111827;
+        }
+
+        /* Curriculum Section */
+        .curriculum-card {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 25px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 20px;
+        }
+
+        .lesson-list-group .list-group-item {
+            border: 1px solid var(--card-border);
+            margin-bottom: 8px;
+            border-radius: 6px !important;
+            padding: 14px 18px;
+            transition: background 0.2s;
+        }
+
+        .lesson-list-group .list-group-item:hover {
+            background-color: #f8fafc;
+        }
+
+        .lesson-link {
+            color: var(--brand-green);
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .lesson-link:hover {
+            color: var(--brand-dark-green);
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        .site-footer {
+            background-color: var(--brand-dark-green);
+            color: white;
+            margin-top: auto;
+            padding: 35px 20px;
+            font-size: 13px;
+        }
+
+        .site-footer a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .site-footer a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        /* Harmonized Green Code Snippet Styling */
+        .code-container {
+            position: relative;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--brand-green);
+        }
+
+        pre[class*="language-"] {
+            background-color: #f4f9f5 !important;
+            border-left: 5px solid var(--brand-green);
+            margin: 0;
+            padding: 1rem;
+        }
+
+        code[class*="language-"] {
+            color: #1a3022 !important;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--brand-green);
+            color: #ffffff;
+            border: none;
+            padding: 4px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: var(--brand-dark-green);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Notice Banner -->
+    <div class="info-banner d-flex align-items-center justify-content-between">
+        <div>
+            <i class="fa-solid fa-circle-info me-2"></i>
+            <strong>Course Overview:</strong> Review module details and start your lessons below.
+        </div>
+        <button class="btn-close btn-sm" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- Green Brand Header -->
+    <div class="brand-header">
+        <a href="{% url 'course_list' %}" class="brand-logo">
+            <i class="fa-solid fa-graduation-cap fa-xl"></i>
+            <span>Federal Polytechnic Idah Portal</span>
+        </a>
+        <div>
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="btn btn-sm btn-outline-light px-3 fw-semibold">
+                    <i class="fa-solid fa-user me-1"></i> Profile
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-sm btn-light fw-bold px-3">Log in</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+
+                <!-- 1. Active Lesson Body Card -->
+                <div class="card shadow-sm border-0 mb-4 p-4">
+                    <span class="badge bg-success mb-2 w-auto align-self-start">
+                        <i class="fa-solid fa-play-circle me-1"></i> Active Lesson
+                    </span>
+                    <h2 class="fw-bold text-success mb-3" style="color: #007a43 !important;">{{ lesson.title }}</h2>
+
+                    <!-- Navigation Tabs for Video vs PDF -->
+                    <ul class="nav nav-pills mb-3 border-bottom pb-2" id="lessonTabs" role="tablist">
+                        {% if lesson.video_url %}
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active fw-bold btn-sm" id="video-tab" data-bs-toggle="tab" data-bs-target="#video-panel" type="button">
+                                <i class="fa-solid fa-circle-play me-1"></i> Video Lecture
+                            </button>
+                        </li>
+                        {% endif %}
+                        
+                        {% if lesson.pdf or course.course_pdf %}
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link {% if not lesson.video_url %}active{% endif %} fw-bold btn-sm" id="pdf-tab" data-bs-toggle="tab" data-bs-target="#pdf-panel" type="button">
+                                <i class="fa-solid fa-file-pdf me-1"></i> Document (PDF)
+                            </button>
+                        </li>
+                        {% endif %}
+                    </ul>
+
+                    <!-- Tab Contents -->
+                    <div class="tab-content" id="lessonTabContent">
+                        <!-- Video Panel -->
+                        {% if lesson.video_url %}
+                        <div class="tab-pane fade show active" id="video-panel" role="tabpanel">
+                            <div class="ratio ratio-16x9 mb-3 rounded overflow-hidden shadow-sm">
+                                <iframe src="{{ lesson.video_url }}" title="{{ lesson.title }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            </div>
+                            <div class="text-end">
+                                <a href="{{ lesson.video_url }}" target="_blank" class="btn btn-sm btn-outline-danger fw-semibold">
+                                    <i class="fa-brands fa-youtube me-1"></i> Open in YouTube App
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- PDF Reader Panel -->
+                        {% if lesson.pdf or course.course_pdf %}
+                        <div class="tab-pane fade {% if not lesson.video_url %}show active{% endif %}" id="pdf-panel" role="tabpanel">
+                            <div class="card shadow-sm border">
+                                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2">
+                                    <span class="small fw-bold">
+                                        <i class="fa-solid fa-book-open text-success me-2" style="color: #007a43 !important;"></i> Document Reader
+                                    </span>
+                                    <span class="badge bg-secondary">
+                                        Page <span id="page_num">1</span> of <span id="page_count">--</span>
+                                    </span>
+                                </div>
+                                <div class="card-body p-2 text-center bg-light" style="min-height: 450px; overflow-x: auto;">
+                                    <canvas id="pdf-render" class="shadow bg-white rounded" style="width: 100%; max-width: 850px; height: auto;"></canvas>
+                                </div>
+                                <div class="card-footer bg-white d-flex justify-content-between align-items-center py-2">
+                                    <button id="prev-page" class="btn btn-outline-success fw-bold btn-sm px-3" disabled style="border-color: #007a43; color: #007a43;">
+                                        <i class="fa-solid fa-chevron-left me-1"></i> Previous Page
+                                    </button>
+                                    <span class="small text-muted fw-bold d-none d-sm-inline">Use buttons to navigate pages</span>
+                                    <button id="next-page" class="btn btn-success fw-bold btn-sm px-3" style="background-color: #007a43; border: none;">
+                                        Next Page <i class="fa-solid fa-chevron-right ms-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Lesson Content Text -->
+                    {% if lesson.content and lesson.content|length > 20 %}
+                        <div class="lesson-content text-secondary fs-6 my-3">
+                            {{ lesson.content|linebreaks }}
+                        </div>
+                    {% endif %}
+
+                    <!-- Action Buttons -->
+                    <div class="mt-4 pt-3 border-top d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <a href="{% url 'course_detail' course.id %}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fa-solid fa-arrow-left me-1"></i> Back to Course Overview
+                        </a>
+                        {% if lesson.quiz %}
+                            <a href="{% url 'take_quiz' lesson.id %}" class="btn btn-success fw-bold btn-sm" style="background-color: #007a43; border: none;">
+                                <i class="fa-solid fa-pen-to-square me-1"></i> Take Quiz
+                            </a>
+                        {% else %}
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <i class="fa-solid fa-lock me-1"></i> No Quiz Available
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+
+
+                <!-- 2. Course Curriculum Section -->
+                <div class="curriculum-card card shadow-sm border-0 p-4">
+                    <h3 class="section-title h5 fw-bold mb-3">
+                        <i class="fa-solid fa-book-open text-success me-2" style="color: #007a43 !important;"></i>Course Curriculum
+                    </h3>
+
+                    <div class="list-group lesson-list-group">
+                        {% for item in course.lessons.all %}
+                            <a href="{% url 'lesson_detail' course.id item.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {% if item.id == lesson.id %}active bg-success text-white{% endif %}">
+                                <span>
+                                    <i class="fa-regular fa-file-code me-2"></i>{{ item.title }}
+                                </span>
+                                <i class="fa-solid fa-chevron-right fs-6 opacity-75"></i>
+                            </a>
+                        {% empty %}
+                            <p class="text-muted mb-0 py-2">No lessons added to this course yet.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <p class="fw-bold mb-3 fs-6">Download the Learning App</p>
+            <p class="fw-bold mb-2">Useful Links</p>
+            <a href="#">School Main Website</a>
+            <a href="#">eCourseware Catalog</a>
+            <a href="#">Lecture Facilitation & Timetable</a>
+            <a href="#">Guides & Student Manuals</a>
+
+            <div class="mt-4 pt-3 border-top border-secondary">
+                <p class="mb-0"><i class="fa-regular fa-envelope me-2"></i> support@fpidah.edu.ng</p>
+                <p class="mt-2 text-white-50 small">&copy; Federal Polytechnic Idah Learning Management System</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- PDF.js Engine Script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+<script>
+    // 1. Resolve PDF URL safely from either lesson or course
+    let rawPdfUrl = "";
+    {% if lesson.pdf %}
+        rawPdfUrl = "{{ lesson.pdf.url }}";
+    {% elif course.course_pdf %}
+        rawPdfUrl = "{{ course.course_pdf.url }}";
+    {% endif %}
+
+    if (rawPdfUrl) {
+        // Set PDF.js Worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+        let pdfDoc = null,
+            pageNum = 1,
+            pageIsRendering = false,
+            pageNumIsPending = null;
+
+        const scale = 1.2,
+            canvas = document.getElementById('pdf-render'),
+            ctx = canvas ? canvas.getContext('2d') : null;
+
+        const renderPage = num => {
+            pageIsRendering = true;
+
+            pdfDoc.getPage(num).then(page => {
+                const viewport = page.getViewport({ scale });
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                const renderCtx = {
+                    canvasContext: ctx,
+                    viewport
+                };
+
+                page.render(renderCtx).promise.then(() => {
+                    pageIsRendering = false;
+
+                    if (pageNumIsPending !== null) {
+                        renderPage(pageNumIsPending);
+                        pageNumIsPending = null;
+                    }
+                });
+
+                document.getElementById('page_num').textContent = num;
+                document.getElementById('prev-page').disabled = num <= 1;
+                document.getElementById('next-page').disabled = num >= pdfDoc.numPages;
+            });
+        };
+
+        const queueRenderPage = num => {
+            if (pageIsRendering) {
+                pageNumIsPending = num;
+            } else {
+                renderPage(num);
+            }
+        };
+
+        document.getElementById('prev-page').addEventListener('click', () => {
+            if (pageNum <= 1) return;
+            pageNum--;
+            queueRenderPage(pageNum);
+        });
+
+        document.getElementById('next-page').addEventListener('click', () => {
+            if (pageNum >= pdfDoc.numPages) return;
+            pageNum++;
+            queueRenderPage(pageNum);
+        });
+
+        // Load Document
+        pdfjsLib.getDocument(rawPdfUrl).promise.then(pdfDoc_ => {
+            pdfDoc = pdfDoc_;
+            document.getElementById('page_count').textContent = pdfDoc.numPages;
+            renderPage(pageNum);
+        }).catch(err => {
+            console.error('Error rendering PDF with JS canvas:', err);
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+{% extends 'academy/base.html' %} 
+
+{% block content %}
+<style>
+  /* Hide all questions by default */
+  .question-card {
+    display: none;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  /* Only show active question */
+  .question-card.active {
+    display: block;
+  }
+
+  .option-label {
+    display: block;
+    padding: 10px 14px;
+    margin: 8px 0;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .option-label:hover {
+    background-color: #e9ecef;
+  }
+
+  .quiz-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+</style>
+
+<h2>{{ quiz.title }}</h2>
+<p>Answer the following multiple-choice questions to test your knowledge.</p>
+
+<form id="quiz-form" method="POST">
+  {% csrf_token %}
+
+  <!-- Django loop rendering questions dynamically -->
+  {% for question in quiz.questions.all %}
+    <div class="question-card {% if forloop.first %}active{% endif %}">
+      <h3>{{ forloop.counter }}. {{ question.text }}</h3>
+      
+      {% for choice in question.choices.all %}
+        <label class="option-label">
+          <input type="radio" name="question_{{ question.id }}" value="{{ choice.id }}">
+          {{ choice.text }}
+        </label>
+      {% endfor %}
+    </div>
+  {% endfor %}
+
+  <!-- Controls -->
+  <div class="quiz-controls">
+    <button type="button" id="next-btn" class="btn btn-primary" disabled>Next</button>
+    <button type="submit" id="submit-btn" class="btn btn-success" style="display: none;" disabled>Submit Quiz</button>
+  </div>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const cards = Array.from(document.querySelectorAll(".question-card"));
+    const nextBtn = document.getElementById("next-btn");
+    const submitBtn = document.getElementById("submit-btn");
+    let currentIndex = 0;
+
+    function checkAnswerSelection() {
+      if (cards.length === 0) return;
+      const currentCard = cards[currentIndex];
+      const hasSelection = currentCard.querySelector('input[type="radio"]:checked') !== null;
+      
+      if (currentIndex < cards.length - 1) {
+        nextBtn.disabled = !hasSelection;
+      } else {
+        submitBtn.disabled = !hasSelection;
+      }
+    }
+
+    document.getElementById("quiz-form").addEventListener("change", (e) => {
+      if (e.target.type === "radio") {
+        checkAnswerSelection();
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (currentIndex < cards.length - 1) {
+        cards[currentIndex].classList.remove("active");
+        currentIndex++;
+        cards[currentIndex].classList.add("active");
+
+        checkAnswerSelection();
+
+        if (currentIndex === cards.length - 1) {
+          nextBtn.style.display = "none";
+          submitBtn.style.display = "inline-block";
+        }
+      }
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'academy/base.html' %}
+
+{% block title %}Community Forum | Portal{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Left Column: New Post Form -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h5 class="fw-bold text-success mb-3"><i class="fa-solid fa-pen-to-square me-2"></i>Start a Discussion</h5>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <input type="text" name="title" class="form-control" placeholder="Title or Topic" required>
+                    </div>
+                    <div class="mb-3">
+                        <textarea name="content" class="form-control" rows="4" placeholder="What's on your mind?" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 fw-bold">Post Discussion</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Posts List -->
+    <div class="col-md-8">
+        <h4 class="fw-bold mb-3">Community Feed</h4>
+        {% if posts %}
+            {% for post in posts %}
+                <div class="card shadow-sm border-0 mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">
+                            <a href="{% url 'post_detail' post.id %}" class="text-decoration-none text-dark">{{ post.title }}</a>
+                        </h5>
+                        <p class="card-text text-muted mb-2">{{ post.content|truncatewords:30 }}</p>
+                        <div class="d-flex justify-content-between align-items-center small text-secondary">
+                            <span><i class="fa-solid fa-user me-1"></i>{{ post.author.username }}</span>
+                            <span><i class="fa-regular fa-comments me-1"></i>{{ post.comments.count }} Comments</span>
+                            <span>{{ post.created_at|timesince }} ago</span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-light">No community posts yet. Be the first to start a discussion!</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

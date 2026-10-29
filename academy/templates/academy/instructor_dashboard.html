@@ -1,0 +1,44 @@
+{% extends 'academy/base.html' %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Lecturer Control Panel</h2>
+        
+        <!-- POST Form for Logout to prevent HTTP 405 error -->
+        <form action="{% url 'logout' %}" method="post" class="m-0">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger">Log Out</button>
+        </form>
+    </div>
+
+    <h4 class="text-muted mb-3">Assigned Courses</h4>
+
+    <div class="row">
+        {% for course in courses %}
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold text-success">{{ course.title }}</h5>
+                    <p class="card-text text-muted">{{ course.description|truncatewords:20 }}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <small class="text-secondary">
+                            Lessons: {{ course.lessons.count }} | Enrolled Students: {{ course.enrollments.count }}
+                        </small>
+                        <a href="{% url 'instructor_course_manage' course.id %}" class="btn btn-success btn-sm">
+                            Manage Course
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                No courses are currently assigned to your account. Please contact the administrator.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'academy/base.html' %}
+
+{% block title %}My Complaints | Portal{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold mb-0">My Submitted Complaints</h3>
+    <a href="{% url 'submit_complaint' %}" class="btn btn-success fw-bold">
+        <i class="fa-solid fa-plus me-1"></i> New Complaint
+    </a>
+</div>
+
+{% if complaints %}
+    <div class="list-group shadow-sm">
+        {% for complaint in complaints %}
+            <div class="list-group-item p-3">
+                <div class="d-flex w-100 justify-content-between align-items-center mb-2">
+                    <h5 class="mb-1 fw-bold text-dark">{{ complaint.subject }}</h5>
+                    {% if complaint.status == 'resolved' %}
+                        <span class="badge bg-success">Resolved</span>
+                    {% elif complaint.status == 'in_progress' %}
+                        <span class="badge bg-warning text-dark">In Progress</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Pending</span>
+                    {% endif %}
+                </div>
+                <p class="mb-1 text-muted">{{ complaint.message }}</p>
+                <small class="text-black-50"><i class="fa-regular fa-clock me-1"></i>Submitted on {{ complaint.created_at|date:"M d, Y - H:i" }}</small>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">You have not submitted any complaints yet.</div>
+{% endif %}
+{% endblock %}

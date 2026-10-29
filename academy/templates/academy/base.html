@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Federal Polytechnic Idah Portal{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --brand-green: #008751;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        .brand-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #ffffff !important;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <!-- Green Navigation Header -->
+    <nav class="navbar navbar-dark bg-success mb-4 shadow-sm" style="background-color: var(--brand-green) !important;">
+        <div class="container d-flex justify-content-between align-items-center">
+            <!-- Brand / Portal Title -->
+            <a class="navbar-brand brand-title d-flex align-items-center gap-2" href="{% if user.is_superuser %}/admin/{% elif user.is_staff %}{% url 'instructor_dashboard' %}{% else %}{% url 'course_list' %}{% endif %}">
+                <i class="fa-solid fa-graduation-cap"></i> Federal Polytechnic Idah Portal
+            </a>
+
+            <!-- Mobile Drawer Toggle Button -->
+            <button class="navbar-toggler border-0 shadow-none p-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileAppDrawer" aria-controls="mobileAppDrawer">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Coursera-Style Offcanvas Side Drawer -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileAppDrawer" aria-labelledby="mobileAppDrawerLabel" style="max-width: 80%;">
+        <div class="offcanvas-header border-bottom py-3">
+            {% if user.is_authenticated %}
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px; background-color: var(--brand-green);">
+                        {{ user.username|slice:":1"|upper }}
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-0 text-dark">{{ user.get_full_name|default:user.username }}</h6>
+                        <small class="text-muted">
+                            {% if user.is_superuser %}
+                                Super Admin Account
+                            {% elif user.is_staff %}
+                                Lecturer Account
+                            {% else %}
+                                Student Account
+                            {% endif %}
+                        </small>
+                    </div>
+                </div>
+            {% else %}
+                <h5 class="offcanvas-title fw-bold text-dark" id="mobileAppDrawerLabel">Menu</h5>
+            {% endif %}
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+
+        <div class="offcanvas-body p-0 d-flex flex-column justify-content-between">
+            <div class="list-group list-group-flush">
+                {% if user.is_authenticated %}
+                    {% if user.is_superuser %}
+                        <!-- Super Admin Menu Links -->
+                        <a href="/admin/" class="list-group-item list-group-item-action py-3 d-flex justify-content-between align-items-center fw-semibold text-dark border-0">
+                            <span><i class="fa-solid fa-gears me-3 text-secondary"></i> Admin Panel</span>
+                            <i class="fa-solid fa-chevron-right text-muted small"></i>
+                        </a>
+                        <a href="{% url 'instructor_dashboard' %}" class="list-group-item list-group-item-action py-3 d-flex justify-content-between align-items-center fw-semibold text-dark border-0">
+                            <span><i class="fa-solid fa-gauge me-3 text-secondary"></i> Instructor Portal</span>
+                            <i class="fa-solid fa-chevron-right text-muted small"></i>
+                        </a>
+                        <a href="{% url 'forum_list' %}" class="list-group-item list-group-item-action py-3 d-flex justify-content-between align-items-center fw-semibold text-dark border-0">
+                            <span><i class="fa-solid fa-comments me-3 text-secondary"></i> Forum</span>
+                            <i class="fa-solid fa-chevron-right text-muted small"></i>
+                        </a>
+                    {% elif user.is_staff %}
+                        <!-- Lecturer Menu Links -->
+                        <a href="{% url 'instructor_dashboard' %}" class="list-group-item list-group-item-action py-3 d-flex justify-content-between align-items-center fw-semibold text-dark border-0">
+                            <span><i class="fa-solid fa-gauge me-3 text-secondary"></i> Dashboard</span>
+                            <i class="fa-solid fa-chevron-right text-muted small"></i>
+                        </a>
+                        <a href="{% url 'forum_list' %}" class="list-group-item list-group-item-action py-3 d-flex justify-content-between align-items-center fw-semibold text-dark border-0">
+                            <span><i class="fa-solid fa-comments me-3 text-secondary"></i> Forum</span>
+                            <i class="fa-solid fa-chevron-right text-muted small"></i>
+                        </a>
+                    {% else %}
+                        <!-- Student Menu Links -->
+                        <a href="{% url 'course_list' %}" class="list-group-item list-group-item-action py-3 d-flex justify-content-between align-items-center fw-semibold text-dark border-0">
+                            <span><i class="fa-solid fa-book-open me-3 text-secondary"></i> Modules</span>
+                            <i class="fa-solid fa-chevron-right text-muted small"></i>
+                        </a>
+                        <a href="{% url 'forum_list' %}" class="list-group-item list-group-item-action py-3 d-flex justify-content-between align-items-center fw-semibold text-dark border-0">
+                            <span><i class="fa-solid fa-comments me-3 text-secondary"></i> Forum</span>
+                            <i class="fa-solid fa-chevron-right text-muted small"></i>
+                        </a>
+                        <a href="{% url 'submit_complaint' %}" class="list-group-item list-group-item-action py-3 d-flex justify-content-between align-items-center fw-semibold text-dark border-0">
+                            <span><i class="fa-solid fa-triangle-exclamation me-3 text-secondary"></i> Support</span>
+                            <i class="fa-solid fa-chevron-right text-muted small"></i>
+                        </a>
+                        <a href="{% url 'profile' %}" class="list-group-item list-group-item-action py-3 d-flex justify-content-between align-items-center fw-semibold text-dark border-0">
+                            <span><i class="fa-solid fa-user me-3 text-secondary"></i> Profile</span>
+                            <i class="fa-solid fa-chevron-right text-muted small"></i>
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <div class="p-3 border-top bg-light">
+                {% if user.is_authenticated %}
+                    <form action="{% url 'logout' %}" method="post" class="m-0">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger w-100 fw-bold py-2">
+                            <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                        </button>
+                    </form>
+                {% else %}
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'login' %}" class="btn btn-outline-success fw-bold">Login</a>
+                        <a href="{% url 'register' %}" class="btn btn-success fw-bold" style="background-color: var(--brand-green); border: none;">Sign Up</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dynamic Content Block -->
+    <div class="container mb-5">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer bg-dark text-white pt-4 pb-3 mt-auto">
+        <div class="container">
+            <p class="fw-bold mb-3 fs-6">Download the Learning App</p>
+            <p class="fw-bold mb-2 small text-uppercase">Useful Links</p>
+            <div class="d-flex flex-column gap-1 small mb-3">
+                <a href="#" class="text-white-50 text-decoration-none">School Main Website</a>
+                <a href="#" class="text-white-50 text-decoration-none">eCourseware Catalog</a>
+                <a href="#" class="text-white-50 text-decoration-none">Lecture Facilitation & Timetable</a>
+                <a href="#" class="text-white-50 text-decoration-none">Guides & Student Manuals</a>
+            </div>
+            <div class="pt-3 border-top border-secondary small">
+                <p class="mb-1"><i class="fa-regular fa-envelope me-2"></i> support@fpidah.edu.ng</p>
+                <p class="mt-2 text-white-50 small">&copy; Federal Polytechnic Idah Learning Management System</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
