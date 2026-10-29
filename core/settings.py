@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-g&=#mo4faeu%id0xqrncdgx7v-_^vueirye)wqf%qbdyo_#sz9'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-g&=#mo4faeu%id0xqrncdgx7v-_^vueirye)wqf%qbdyo_#sz9')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -45,12 +45,16 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Added WhiteNoise for static file serving on Render
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    # Custom Fee Verification Middleware
+    'academy.middleware.FeePaymentMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -126,6 +130,9 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# WhiteNoise storage configuration for compression & caching
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -142,8 +149,8 @@ LOGIN_URL = '/accounts/login/'
 
 
 # Paystack Payment Keys
-PAYSTACK_SECRET_KEY = 'sk_test_your_secret_key_here'
-PAYSTACK_PUBLIC_KEY = 'pk_test_your_public_key_here'
+PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY', 'sk_test_your_secret_key_here')
+PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY', 'pk_test_your_public_key_here')
 
 
 # Console Email Backend during Development
@@ -225,15 +232,3 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success",
     },
 }
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
-    # Custom Fee Verification Middleware
-    'academy.middleware.FeePaymentMiddleware',
-]
